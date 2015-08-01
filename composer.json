@@ -1,0 +1,24 @@
+{
+    "name": "solutionlib/cart",
+    "description": "PHP Simple cart",
+    "keywords": ["shop", "commerce", "cart"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Bogin",
+            "email": "ivanbogin@gmail.com"
+        }
+    ],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "SolutionLib\\Cart\\": "src/"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "4.7.*"
+    }
+}
