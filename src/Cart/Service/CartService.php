@@ -9,6 +9,9 @@ use ShopLib\Product\Entity\Product;
 use ShopLib\Stock\Exception\OutOfStockException;
 use ShopLib\Stock\Service\StockServiceInterface;
 
+/**
+ * Cart manipulation service
+ */
 class CartService
 {
     /**
@@ -21,6 +24,10 @@ class CartService
      */
     protected $stockService;
 
+    /**
+     * @param CartRepositoryInterface $cartRepository
+     * @param StockServiceInterface   $stockService
+     */
     public function __construct(CartRepositoryInterface $cartRepository, StockServiceInterface $stockService)
     {
         $this->cartRepository = $cartRepository;
@@ -40,7 +47,7 @@ class CartService
     }
 
     /**
-     * Save cart with items to repository
+     * Recalculate and save Cart with items to repository
      *
      * @param Cart $cart
      */
@@ -51,7 +58,7 @@ class CartService
     }
 
     /**
-     * Add product to cart and reserve specified quantity in stock.
+     * Add product to cart and check for specified quantity in stock.
      * If there is not enough quantity in stock OutOfStockException will be thrown.
      * If product is already in the cart - then add additional quantity.
      *
@@ -63,8 +70,6 @@ class CartService
      */
     public function addProduct(Cart $cart, Product $product, $qty)
     {
-        $this->stockService->reserve($product->getSku(), $qty);
-
         if ($cart->isItemInCart($product->getSku())) {
             $item = $cart->getItemBySku($product->getSku());
             $item->setProduct($product);
@@ -74,13 +79,19 @@ class CartService
             $cart->addItem($item);
         }
 
+        $stockQty = $this->stockService->getStock($product->getSku());
+        if ($item->getQty() > $stockQty) {
+            throw new OutOfStockException();
+        }
+
         $this->saveCart($cart);
     }
 
     /**
      * Update item quantity.
-     * Release items on stock before saving cart.
-     * Reserve items on stock after saving cart.
+     * If quantity <= 0 - remove from cart.
+     * If there is no such quantity in the stock - throw OutOfStockException.
+     * If there is no such product in the cart - throw OutOfBoundsException.
      *
      * @param Cart   $cart
      * @param string $sku
@@ -94,36 +105,31 @@ class CartService
         if (!$cart->isItemInCart($sku)) {
             throw new \OutOfBoundsException(sprintf('item %s not found in the cart', $sku));
         }
-        if ($qty === 0) {
-            $this->removeItem($cart, $sku);
-        } else {
-            $item = $cart->getItemBySku($sku);
-            $diff = $qty - $item->getQty();
 
-            if ($diff > 0) {
-                $this->stockService->reserve($sku, $diff);
-                $item->setQty($qty);
-                $this->saveCart($cart);
-            } else {
-                $this->stockService->release($sku, abs($diff));
-                $item->setQty($qty);
-                $this->saveCart($cart);
-            }
+        if ($qty <= 0) {
+            $this->removeItem($cart, $sku);
+            return;
         }
+
+        if ($qty > $this->stockService->getStock($sku)) {
+            throw new OutOfStockException();
+        }
+
+        $item = $cart->getItemBySku($sku);
+        $item->setQty($qty);
+        $this->saveCart($cart);
     }
 
     /**
-     * Remove item from the cart and release stock
+     * Remove item from the cart
      *
      * @param Cart   $cart
      * @param string $sku
      */
     public function removeItem(Cart $cart, $sku)
     {
-        $qty = $cart->getItemBySku($sku)->getQty();
         $cart->removeItem($sku);
         $this->saveCart($cart);
-        $this->stockService->release($sku, $qty);
     }
 
     /**
@@ -139,6 +145,7 @@ class CartService
             $total += $item->getTotal();
             $quantity += $item->getQty();
         }
+        $cart->setSubtotal($total);
         $cart->setTotal($total);
         $cart->setQuantity($quantity);
     }

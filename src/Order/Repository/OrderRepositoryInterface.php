@@ -15,7 +15,7 @@ interface OrderRepositoryInterface
     public function getById($id);
 
     /**
-     * Save Order to repository and return Order ID
+     * Save Order to repository
      *
      * @param Order $order
      * @return int

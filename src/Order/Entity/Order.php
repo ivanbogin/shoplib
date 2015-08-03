@@ -135,4 +135,12 @@ class Order
     {
         $this->items = $items;
     }
+
+    /**
+     * @param OrderItem $orderItem
+     */
+    public function addItem(OrderItem $orderItem)
+    {
+        $this->items[] = $orderItem;
+    }
 }

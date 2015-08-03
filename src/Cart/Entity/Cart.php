@@ -17,6 +17,11 @@ class Cart
     /**
      * @var float
      */
+    protected $subtotal;
+
+    /**
+     * @var float
+     */
     protected $total;
 
     /**
@@ -55,6 +60,22 @@ class Cart
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal;
+    }
+
+    /**
+     * @param float $subtotal
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal;
     }
 
     /**
