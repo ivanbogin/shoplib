@@ -5,7 +5,7 @@ namespace ShopLib\Order\Entity;
 class Order
 {
     /**
-     * @var int|string
+     * @var int
      */
     protected $id;
     /**
@@ -22,7 +22,7 @@ class Order
     protected $shippingAddress;
 
     /**
-     * @return int|string
+     * @return int
      */
     public function getId()
     {
@@ -30,7 +30,7 @@ class Order
     }
 
     /**
-     * @param int|string $id
+     * @param int $id
      */
     public function setId($id)
     {

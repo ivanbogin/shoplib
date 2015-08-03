@@ -5,11 +5,11 @@ namespace ShopLib\Order\Entity;
 class OrderItem
 {
     /**
-     * @var int|string
+     * @var int
      */
     protected $id;
     /**
-     * @var int|string
+     * @var int
      */
     protected $orderId;
     /**
@@ -26,7 +26,7 @@ class OrderItem
     protected $itemPrice;
 
     /**
-     * @return int|string
+     * @return int
      */
     public function getId()
     {
@@ -34,7 +34,7 @@ class OrderItem
     }
 
     /**
-     * @param int|string $id
+     * @param int $id
      */
     public function setId($id)
     {
@@ -42,7 +42,7 @@ class OrderItem
     }
 
     /**
-     * @return int|string
+     * @return int
      */
     public function getOrderId()
     {
@@ -50,7 +50,7 @@ class OrderItem
     }
 
     /**
-     * @param int|string $orderId
+     * @param int $orderId
      */
     public function setOrderId($orderId)
     {
