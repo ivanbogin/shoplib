@@ -1,6 +1,6 @@
 {
     "name": "ivanbogin/shoplib",
-    "description": "Simple shopping library on PHP",
+    "description": "Shopping library based on DDD principles",
     "keywords": ["shop", "commerce", "cart"],
     "license": "MIT",
     "authors": [
