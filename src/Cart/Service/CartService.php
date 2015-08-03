@@ -67,6 +67,7 @@ class CartService
 
         if ($cart->isItemInCart($product->getSku())) {
             $item = $cart->getItemBySku($product->getSku());
+            $item->setProduct($product);
             $item->setQty($item->getQty() + $qty);
         } else {
             $item = new CartItem($product, $qty);
