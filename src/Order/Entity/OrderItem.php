@@ -2,24 +2,35 @@
 
 namespace ShopLib\Order\Entity;
 
+/**
+ * Represents a single Product position in an Order.
+ * Price at the time of Order creation.
+ *
+ * Class OrderItem
+ * @package ShopLib\Order\Entity
+ */
 class OrderItem
 {
     /**
      * @var int
      */
     protected $id;
+
     /**
-     * @var int
+     * @var Order
      */
-    protected $orderId;
+    protected $order;
+
     /**
      * @var string
      */
     protected $sku;
+
     /**
      * @var int
      */
     protected $qty;
+
     /**
      * @var float
      */
@@ -42,19 +53,19 @@ class OrderItem
     }
 
     /**
-     * @return int
+     * @return Order
      */
-    public function getOrderId()
+    public function getOrder()
     {
-        return $this->orderId;
+        return $this->order;
     }
 
     /**
-     * @param int $orderId
+     * @param Order $order
      */
-    public function setOrderId($orderId)
+    public function setOrder($order)
     {
-        $this->orderId = $orderId;
+        $this->order = $order;
     }
 
     /**

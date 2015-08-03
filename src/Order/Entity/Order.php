@@ -2,24 +2,43 @@
 
 namespace ShopLib\Order\Entity;
 
+/**
+ * Completed Order
+ *
+ * Class Order
+ * @package ShopLib\Order\Entity
+ */
 class Order
 {
     /**
      * @var int
      */
     protected $id;
+
     /**
-     * @var int
+     * @var float
      */
-    protected $customerId;
+    protected $subtotal;
+
+    /**
+     * @var float
+     */
+    protected $total;
+
     /**
      * @var string
      */
     protected $billingAddress;
+
     /**
      * @var string
      */
     protected $shippingAddress;
+
+    /**
+     * @var OrderItem[]
+     */
+    protected $items = [];
 
     /**
      * @return int
@@ -38,19 +57,35 @@ class Order
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getCustomerId()
+    public function getSubtotal()
     {
-        return $this->customerId;
+        return $this->subtotal;
     }
 
     /**
-     * @param int $customerId
+     * @param float $subtotal
      */
-    public function setCustomerId($customerId)
+    public function setSubtotal($subtotal)
     {
-        $this->customerId = $customerId;
+        $this->subtotal = $subtotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
     }
 
     /**
@@ -83,5 +118,21 @@ class Order
     public function setShippingAddress($shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
+    }
+
+    /**
+     * @return OrderItem[]
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param OrderItem[] $items
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
     }
 }
