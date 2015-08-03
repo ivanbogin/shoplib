@@ -1,21 +1,21 @@
 <?php
 
-namespace ShopLib;
+namespace ShopLib\Cart\Model;
 
 class CartItem
 {
     /**
      * @var string
      */
-    private $sku;
+    protected $sku;
     /**
      * @var int
      */
-    private $qty;
+    protected $qty;
     /**
      * @var float
      */
-    private $price;
+    protected $price;
 
     /**
      * @param string $sku

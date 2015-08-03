@@ -2,7 +2,7 @@
 
 namespace ShopLib\Tests;
 
-use ShopLib\Cart;
+use ShopLib\Cart\Model\Cart;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {

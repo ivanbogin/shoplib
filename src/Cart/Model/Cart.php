@@ -1,23 +1,23 @@
 <?php
 
-namespace ShopLib;
+namespace ShopLib\Cart\Model;
 
 class Cart
 {
     /**
      * @var CartItem[]
      */
-    private $items;
+    protected $items;
 
     /**
      * @var float
      */
-    private $total;
+    protected $total;
 
     /**
      * @var int
      */
-    private $quantity;
+    protected $quantity;
 
     public function __construct()
     {
@@ -110,7 +110,7 @@ class Cart
     /**
      * Recalculate cart total and quantity
      */
-    private function recalculate()
+    protected function recalculate()
     {
         $this->total = 0;
         $this->quantity = 0;
@@ -126,7 +126,7 @@ class Cart
      * @param string $sku
      * @return bool
      */
-    private function isItemInCart($sku)
+    protected function isItemInCart($sku)
     {
         return array_key_exists($sku, $this->items);
     }
@@ -137,7 +137,7 @@ class Cart
      * @param string $sku
      * @return CartItem
      */
-    private function getItemBySku($sku)
+    protected function getItemBySku($sku)
     {
         return $this->items[$sku];
     }
