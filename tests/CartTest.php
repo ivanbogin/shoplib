@@ -6,46 +6,67 @@ use ShopLib\Cart;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Cart
+     */
+    protected $cart;
+
+    protected function setUp()
+    {
+        $this->cart = new Cart();
+    }
+
+    /**
+     * Assert current cart
+     *
+     * @param int $count Number of positions in cart
+     * @param int $quantity Total number of items
+     * @param float $total Total price
+     */
+    protected function assertCart($count, $quantity, $total)
+    {
+        $this->assertCount($count, $this->cart->getItems());
+        $this->assertEquals($quantity, $this->cart->getQuantity());
+        $this->assertEquals($total, $this->cart->getTotal());
+    }
+
     public function testCartIsEmpty()
     {
-        $cart = new Cart();
-
-        $this->assertEmpty($cart->getItems());
-        $this->assertEquals(0, $cart->getQuantity());
-        $this->assertEquals(0, $cart->getTotal());
+        $this->assertCart(0, 0, 0);
     }
 
     public function testAddItem()
     {
-        $cart = new Cart();
-        $cart->addItem('B00BGA9WK2', 1, 399.95);
-        $cart->addItem('B00FNQUN7Q', 2, 54.95);
-
-        $this->assertCount(2, $cart->getItems());
-        $this->assertEquals(3, $cart->getQuantity());
-        $this->assertEquals(509.85, $cart->getTotal());
+        $this->cart->addItem('B00BGA9WK2', 1, 399.95);
+        $this->cart->addItem('B00FNQUN7Q', 2, 54.95);
+        $this->assertCart(2, 3, 509.85);
     }
 
     public function testAddItemTwice()
     {
-        $cart = new Cart();
-        $cart->addItem('B00FNQUN7Q', 1, 54.95);
+        $this->cart->addItem('B00FNQUN7Q', 1, 54.95);
         // Also price was changed
-        $cart->addItem('B00FNQUN7Q', 1, 60);
-
-        $this->assertCount(1, $cart->getItems());
-        $this->assertEquals(2, $cart->getQuantity());
-        $this->assertEquals(120, $cart->getTotal());
+        $this->cart->addItem('B00FNQUN7Q', 1, 60);
+        $this->assertCart(1, 2, 120);
     }
 
     public function testUpdateQty()
     {
-        $cart = new Cart();
-        $cart->addItem('B00FNQUN7Q', 1, 54.95);
-        $cart->updateItemQty('B00FNQUN7Q', 3);
-
-        $this->assertCount(1, $cart->getItems());
-        $this->assertEquals(3, $cart->getQuantity());
-        $this->assertEquals(164.85, $cart->getTotal());
+        $this->cart->addItem('B00FNQUN7Q', 1, 54.95);
+        $this->cart->updateItemQty('B00FNQUN7Q', 3);
+        $this->assertCart(1, 3, 164.85);
     }
+
+    public function testUpdateQtyToZero()
+    {
+        $this->cart->addItem('B00BGA9WK2', 1, 399.95);
+        $this->cart->addItem('B00FNQUN7Q', 2, 54.95);
+
+        $this->cart->updateItemQty('B00BGA9WK2', 0);
+        $this->assertCart(1, 2, 109.9);
+
+        $this->cart->updateItemQty('B00FNQUN7Q', 0);
+        $this->assertCart(0, 0, 0);
+    }
+
 }

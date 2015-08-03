@@ -88,7 +88,22 @@ class Cart
         if (!$this->isItemInCart($sku)) {
             throw new \OutOfBoundsException(sprintf('item %s not found in the cart', $sku));
         }
-        $this->getItemBySku($sku)->setQty($qty);
+        if ($qty === 0) {
+            $this->removeItem($sku);
+        } else {
+            $this->getItemBySku($sku)->setQty($qty);
+            $this->recalculate();
+        }
+    }
+
+    /**
+     * Remove item from the cart
+     *
+     * @param string $sku
+     */
+    public function removeItem($sku)
+    {
+        unset($this->items[$sku]);
         $this->recalculate();
     }
 
