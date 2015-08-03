@@ -5,6 +5,7 @@ namespace ShopLib\Cart\Service\Tests;
 use ShopLib\Cart\Entity\Cart;
 use ShopLib\Cart\Repository\CartRepositoryInterface;
 use ShopLib\Cart\Service\CartService;
+use ShopLib\Discount\Entity\Discount;
 use ShopLib\Product\Entity\Product;
 use ShopLib\Stock\Service\StockServiceInterface;
 
@@ -109,6 +110,22 @@ class CartServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->cartService->removeItem($this->cart, 'B00FNQUN7Q');
         $this->assertCart(0, 0, 0);
+    }
+
+    public function testApplyDiscount()
+    {
+        $this->stockService->expects($this->exactly(1))->method('getStock')->will($this->returnValue(1));
+
+        $this->cartService->addProduct($this->cart, $this->createProduct('B00BGA9WK2', 400), 1);
+        $this->assertCart(1, 1, 400);
+
+        $discount = new Discount();
+        $discount->setType(Discount::TYPE_PRICE);
+        $discount->setAmount(200);
+        $this->cartService->applyDiscount($this->cart, $discount);
+
+        $this->assertEquals(400, $this->cart->getSubtotal());
+        $this->assertEquals(200, $this->cart->getTotal());
     }
 
     /**

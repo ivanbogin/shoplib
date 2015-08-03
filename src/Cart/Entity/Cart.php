@@ -2,6 +2,9 @@
 
 namespace ShopLib\Cart\Entity;
 
+use ShopLib\Cart\Service\CalcStrategyInterface;
+use ShopLib\Discount\Entity\Discount;
+
 class Cart
 {
     /**
@@ -28,6 +31,11 @@ class Cart
      * @var int
      */
     protected $quantity;
+
+    /**
+     * @var Discount
+     */
+    protected $discount;
 
     public function __construct()
     {
@@ -156,5 +164,21 @@ class Cart
         if ($this->isItemInCart($sku)) {
             unset($this->items[$sku]);
         }
+    }
+
+    /**
+     * @return Discount
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param Discount $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
     }
 }

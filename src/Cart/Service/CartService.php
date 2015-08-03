@@ -4,7 +4,9 @@ namespace ShopLib\Cart\Service;
 
 use ShopLib\Cart\Entity\Cart;
 use ShopLib\Cart\Entity\CartItem;
+use ShopLib\Cart\Factory\CalcStrategyFactory;
 use ShopLib\Cart\Repository\CartRepositoryInterface;
+use ShopLib\Discount\Entity\Discount;
 use ShopLib\Product\Entity\Product;
 use ShopLib\Stock\Exception\OutOfStockException;
 use ShopLib\Stock\Service\StockServiceInterface;
@@ -25,6 +27,11 @@ class CartService
     protected $stockService;
 
     /**
+     * @var CalcStrategyFactory
+     */
+    protected $calcStrategyFactory;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param StockServiceInterface   $stockService
      */
@@ -32,6 +39,7 @@ class CartService
     {
         $this->cartRepository = $cartRepository;
         $this->stockService = $stockService;
+        $this->calcStrategyFactory = new CalcStrategyFactory();
     }
 
     /**
@@ -133,20 +141,25 @@ class CartService
     }
 
     /**
-     * Recalculate cart total and quantity
+     * Apply discount to Cart, recalculate with a new strategy and save it
+     *
+     * @param Cart     $cart
+     * @param Discount $discount
+     */
+    public function applyDiscount(Cart $cart, Discount $discount)
+    {
+        $cart->setDiscount($discount);
+        $this->saveCart($cart);
+    }
+
+    /**
+     * Recalculate cart total and quantity using Calculation Strategy
      *
      * @param Cart $cart
      */
     protected function recalculate(Cart $cart)
     {
-        $total = 0;
-        $quantity = 0;
-        foreach ($cart->getItems() as $item) {
-            $total += $item->getTotal();
-            $quantity += $item->getQty();
-        }
-        $cart->setSubtotal($total);
-        $cart->setTotal($total);
-        $cart->setQuantity($quantity);
+        $strategy = $this->calcStrategyFactory->getStrategy($cart->getDiscount());
+        $strategy->calculate($cart);
     }
 }
