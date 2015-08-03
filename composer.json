@@ -1,6 +1,6 @@
 {
-    "name": "solutionlib/cart",
-    "description": "PHP Simple cart",
+    "name": "ivanbogin/shoplib",
+    "description": "Simple shopping library on PHP",
     "keywords": ["shop", "commerce", "cart"],
     "license": "MIT",
     "authors": [
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SolutionLib\\Cart\\": "src/"
+            "ShopLib\\": "src/"
         }
     },
     "require": {},
