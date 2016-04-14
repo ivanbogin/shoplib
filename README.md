@@ -1,3 +1,2 @@
 # ShopLib
-Shopping library based on DDD principles. 
-Under development and not ready for production yet.
+Example shopping library based on DDD principles, covered by unit tests.
